@@ -2,7 +2,7 @@
   "status": "market_data_ready",
   "source": "iFinD HTTP API · 000300.SH + IF逐月合约",
   "mode": "spot_market_diagnostic",
-  "updated_at": "2026-08-12T22:27:26.963580+08:00",
+  "updated_at": "2026-08-13T16:10:58.191179+08:00",
   "market": {
     "latest": {
       "date": "2026-08-10",
@@ -2794,8 +2794,8 @@
     },
     {
       "label": "二十类形态与OCO代理",
-      "status": "ready",
-      "detail": "五年日线50个事件 · 五分钟样本外15笔"
+      "status": "waiting",
+      "detail": "训练家族最多4/30笔 · 当前仅研究代理"
     },
     {
       "label": "合约日历与保证金",
@@ -2805,7 +2805,7 @@
     {
       "label": "正式样本外",
       "status": "waiting",
-      "detail": "等待券商手续费与保证金表"
+      "detail": "多年5分钟历史与券商历史成本表均未齐备"
     }
   ],
   "disclaimer": "沪深300现货与IF逐月合约行情已经独立日线交叉校验。一年样本和10万元分数名义本金只能形成技术研究代理。中金所IF每点300元；合约条款最低保证金8%仅作元数据，目标期22份官方结算参数表多空均为12%，实际资本约束按12%执行。exchange_minimum_feasibility仅按交易所结算费率和整数张数做资本可行性压力测试；券商实际保证金、手续费、历史逐时点费率和强平规则未提供，因此两组结果均不是可执行IF正式样本外回测。",
@@ -2960,7 +2960,7 @@
       "source_window": "2025-08-13T09:35:00..2026-08-10T15:00:00"
     },
     "as_of": "2026-08-10T15:00:00",
-    "updated_at": "2026-08-12T22:22:54.412437+08:00",
+    "updated_at": "2026-08-13T10:30:52.164962+08:00",
     "data": {
       "requested_research_start": "2025-08-01T00:00:00",
       "start": "2025-08-13T09:35:00",
@@ -22799,6 +22799,9 @@
         "end": "2026-02-06T15:00:00",
         "bars": 5760,
         "trading_days": 120,
+        "feature_ready_bars": 4788,
+        "feature_ready_trading_days": 100,
+        "first_feature_ready_at": "2025-09-10T10:35:00",
         "share_of_non_embargo_days": 0.6
       },
       "validation": {
@@ -22806,6 +22809,9 @@
         "end": "2026-05-15T15:00:00",
         "bars": 1920,
         "trading_days": 40,
+        "feature_ready_bars": 1920,
+        "feature_ready_trading_days": 40,
+        "first_feature_ready_at": "2026-03-17T09:35:00",
         "share_of_non_embargo_days": 0.2
       },
       "test": {
@@ -22813,6 +22819,9 @@
         "end": "2026-08-10T15:00:00",
         "bars": 1920,
         "trading_days": 40,
+        "feature_ready_bars": 1920,
+        "feature_ready_trading_days": 40,
+        "first_feature_ready_at": "2026-06-15T09:35:00",
         "share_of_non_embargo_days": 0.2
       },
       "embargo": {
@@ -53016,5 +53025,481 @@
       "p值使用正态近似；小样本结果仅作描述，FDR未通过不得宣称显著",
       "验证集和测试集只披露，不参与家族排序或参数调整"
     ]
+  },
+  "pattern_evidence": {
+    "schema_version": 1,
+    "generated_at": "2026-08-13T10:31:11.630951+08:00",
+    "formal_status": "not_ready_for_multi_year_formal_oos",
+    "formal_ready": false,
+    "source": {
+      "as_of": "2026-08-10T15:00:00",
+      "frequency": "5m",
+      "research_layer": "five_minute_execution_validation",
+      "ranking_uses": "train_only"
+    },
+    "policy": {
+      "minimum_training_closed_trades_per_family": 30,
+      "thirty_trade_warning": "30笔只是最低训练稳定性筛查，不保证统计显著性、盈利或样本外稳定。"
+    },
+    "exposure": {
+      "formal_first_timestamp": "2025-08-12T09:35:00",
+      "formal_last_timestamp": "2026-08-10T15:00:00",
+      "formal_trading_days": 241,
+      "research_raw_trading_days": 240,
+      "train_calendar_trading_days": 120,
+      "train_feature_ready_trading_days": 100,
+      "first_feature_ready_at": "2025-09-10T10:35:00"
+    },
+    "train_funnel": {
+      "confirmed_events": 257,
+      "eligible_signal_bars": 20,
+      "closed_trades": 20
+    },
+    "combined_strategy": {
+      "scope": "top_twenty_plus_channel_baseline_mutually_exclusive",
+      "train_closed_trades": 21,
+      "validation_closed_trades": 15,
+      "fixed_test_closed_trades": 15,
+      "parameter_selection_training_trades": 3,
+      "walk_forward_oos_folds": 6,
+      "walk_forward_oos_trades": 7,
+      "counts_must_not_be_reassigned_to_any_family": true
+    },
+    "capacity": {
+      "leading_nonzero_family_years_rounded_up": 6,
+      "nonzero_family_p90_years_rounded_up": 21,
+      "zero_trade_family_count": 9,
+      "minimum_data_request": "至少6年、最好10年、沪深300现货+逐月IF、5分钟完整盘中历史",
+      "required_delivery": [
+        "raw monthly IF contracts",
+        "contract calendar/list/expiry/last trade dates",
+        "point-in-time commission schedule",
+        "point-in-time margin schedule",
+        "source and timezone metadata"
+      ],
+      "statement": "按当前冻结规则的训练交易率点估计，领先的非零形态至少需约6年原始五分钟历史；覆盖非零形态点估计的90%分位需约21年。仍有9类为零交易，不能估算年限。"
+    },
+    "families": [
+      {
+        "rank": 1,
+        "family_id": "FWEDGE",
+        "type": "下降楔形",
+        "direction": "做多",
+        "train": {
+          "confirmed_events": 53,
+          "eligible_signal_bars": 4,
+          "closed_trades": 4
+        },
+        "evidence_status": "insufficient_training_trades",
+        "training_trade_gap": 26,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "point_estimate_only",
+          "total_years_point": 5.25,
+          "total_years_for_90pct_chance_at_point_rate": 6.44,
+          "total_years_rate_lower_stress": 11.67
+        }
+      },
+      {
+        "rank": 2,
+        "family_id": "DBOT",
+        "type": "双底W",
+        "direction": "做多",
+        "train": {
+          "confirmed_events": 27,
+          "eligible_signal_bars": 2,
+          "closed_trades": 2
+        },
+        "evidence_status": "insufficient_training_trades",
+        "training_trade_gap": 28,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "point_estimate_only",
+          "total_years_point": 10.21,
+          "total_years_for_90pct_chance_at_point_rate": 12.6,
+          "total_years_rate_lower_stress": 37.61
+        }
+      },
+      {
+        "rank": 3,
+        "family_id": "RABROAD",
+        "type": "直角扩散·上沿抬升",
+        "direction": "双向",
+        "train": {
+          "confirmed_events": 20,
+          "eligible_signal_bars": 4,
+          "closed_trades": 4
+        },
+        "evidence_status": "insufficient_training_trades",
+        "training_trade_gap": 26,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "point_estimate_only",
+          "total_years_point": 5.25,
+          "total_years_for_90pct_chance_at_point_rate": 6.44,
+          "total_years_rate_lower_stress": 11.67
+        }
+      },
+      {
+        "rank": 4,
+        "family_id": "RWEDGE",
+        "type": "上升楔形",
+        "direction": "做空",
+        "train": {
+          "confirmed_events": 46,
+          "eligible_signal_bars": 1,
+          "closed_trades": 1
+        },
+        "evidence_status": "insufficient_training_trades",
+        "training_trade_gap": 29,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "point_estimate_only",
+          "total_years_point": 20.13,
+          "total_years_for_90pct_chance_at_point_rate": 24.9,
+          "total_years_rate_lower_stress": 188.61
+        }
+      },
+      {
+        "rank": 5,
+        "family_id": "HS",
+        "type": "头肩顶",
+        "direction": "做空",
+        "train": {
+          "confirmed_events": 9,
+          "eligible_signal_bars": 2,
+          "closed_trades": 2
+        },
+        "evidence_status": "insufficient_training_trades",
+        "training_trade_gap": 28,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "point_estimate_only",
+          "total_years_point": 10.21,
+          "total_years_for_90pct_chance_at_point_rate": 12.6,
+          "total_years_rate_lower_stress": 37.61
+        }
+      },
+      {
+        "rank": 6,
+        "family_id": "RTOP",
+        "type": "箱体·高点起",
+        "direction": "双向",
+        "train": {
+          "confirmed_events": 16,
+          "eligible_signal_bars": 2,
+          "closed_trades": 2
+        },
+        "evidence_status": "insufficient_training_trades",
+        "training_trade_gap": 28,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "point_estimate_only",
+          "total_years_point": 10.21,
+          "total_years_for_90pct_chance_at_point_rate": 12.6,
+          "total_years_rate_lower_stress": 37.61
+        }
+      },
+      {
+        "rank": 7,
+        "family_id": "ATRI",
+        "type": "上升三角",
+        "direction": "做多",
+        "train": {
+          "confirmed_events": 6,
+          "eligible_signal_bars": 1,
+          "closed_trades": 1
+        },
+        "evidence_status": "insufficient_training_trades",
+        "training_trade_gap": 29,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "point_estimate_only",
+          "total_years_point": 20.13,
+          "total_years_for_90pct_chance_at_point_rate": 24.9,
+          "total_years_rate_lower_stress": 188.61
+        }
+      },
+      {
+        "rank": 8,
+        "family_id": "PENN",
+        "type": "三角旗",
+        "direction": "旗杆同向",
+        "train": {
+          "confirmed_events": 2,
+          "eligible_signal_bars": 1,
+          "closed_trades": 1
+        },
+        "evidence_status": "insufficient_training_trades",
+        "training_trade_gap": 29,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "point_estimate_only",
+          "total_years_point": 20.13,
+          "total_years_for_90pct_chance_at_point_rate": 24.9,
+          "total_years_rate_lower_stress": 188.61
+        }
+      },
+      {
+        "rank": 9,
+        "family_id": "RBOT",
+        "type": "箱体·低点起",
+        "direction": "双向",
+        "train": {
+          "confirmed_events": 10,
+          "eligible_signal_bars": 1,
+          "closed_trades": 1
+        },
+        "evidence_status": "insufficient_training_trades",
+        "training_trade_gap": 29,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "point_estimate_only",
+          "total_years_point": 20.13,
+          "total_years_for_90pct_chance_at_point_rate": 24.9,
+          "total_years_rate_lower_stress": 188.61
+        }
+      },
+      {
+        "rank": 10,
+        "family_id": "DTRI",
+        "type": "下降三角",
+        "direction": "做空",
+        "train": {
+          "confirmed_events": 3,
+          "eligible_signal_bars": 1,
+          "closed_trades": 1
+        },
+        "evidence_status": "insufficient_training_trades",
+        "training_trade_gap": 29,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "point_estimate_only",
+          "total_years_point": 20.13,
+          "total_years_for_90pct_chance_at_point_rate": 24.9,
+          "total_years_rate_lower_stress": 188.61
+        }
+      },
+      {
+        "rank": 11,
+        "family_id": "RDBROAD",
+        "type": "直角扩散·下沿下移",
+        "direction": "双向",
+        "train": {
+          "confirmed_events": 15,
+          "eligible_signal_bars": 1,
+          "closed_trades": 1
+        },
+        "evidence_status": "insufficient_training_trades",
+        "training_trade_gap": 29,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "point_estimate_only",
+          "total_years_point": 20.13,
+          "total_years_for_90pct_chance_at_point_rate": 24.9,
+          "total_years_rate_lower_stress": 188.61
+        }
+      },
+      {
+        "rank": 12,
+        "family_id": "IHS",
+        "type": "头肩底",
+        "direction": "做多",
+        "train": {
+          "confirmed_events": 2,
+          "eligible_signal_bars": 0,
+          "closed_trades": 0
+        },
+        "evidence_status": "gating_bottleneck",
+        "training_trade_gap": 30,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "not_estimable_zero_observed_rate",
+          "total_years_point": null,
+          "total_years_for_90pct_chance_at_point_rate": null,
+          "total_years_rate_lower_stress": null
+        }
+      },
+      {
+        "rank": 13,
+        "family_id": "BTOP",
+        "type": "扩散形态·高点起",
+        "direction": "双向",
+        "train": {
+          "confirmed_events": 3,
+          "eligible_signal_bars": 0,
+          "closed_trades": 0
+        },
+        "evidence_status": "gating_bottleneck",
+        "training_trade_gap": 30,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "not_estimable_zero_observed_rate",
+          "total_years_point": null,
+          "total_years_for_90pct_chance_at_point_rate": null,
+          "total_years_rate_lower_stress": null
+        }
+      },
+      {
+        "rank": 14,
+        "family_id": "BBOT",
+        "type": "扩散形态·低点起",
+        "direction": "双向",
+        "train": {
+          "confirmed_events": 4,
+          "eligible_signal_bars": 0,
+          "closed_trades": 0
+        },
+        "evidence_status": "gating_bottleneck",
+        "training_trade_gap": 30,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "not_estimable_zero_observed_rate",
+          "total_years_point": null,
+          "total_years_for_90pct_chance_at_point_rate": null,
+          "total_years_rate_lower_stress": null
+        }
+      },
+      {
+        "rank": 15,
+        "family_id": "TTOP",
+        "type": "收敛三角·高点起",
+        "direction": "双向",
+        "train": {
+          "confirmed_events": 2,
+          "eligible_signal_bars": 0,
+          "closed_trades": 0
+        },
+        "evidence_status": "gating_bottleneck",
+        "training_trade_gap": 30,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "not_estimable_zero_observed_rate",
+          "total_years_point": null,
+          "total_years_for_90pct_chance_at_point_rate": null,
+          "total_years_rate_lower_stress": null
+        }
+      },
+      {
+        "rank": 16,
+        "family_id": "TBOT",
+        "type": "收敛三角·低点起",
+        "direction": "双向",
+        "train": {
+          "confirmed_events": 4,
+          "eligible_signal_bars": 0,
+          "closed_trades": 0
+        },
+        "evidence_status": "gating_bottleneck",
+        "training_trade_gap": 30,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "not_estimable_zero_observed_rate",
+          "total_years_point": null,
+          "total_years_for_90pct_chance_at_point_rate": null,
+          "total_years_rate_lower_stress": null
+        }
+      },
+      {
+        "rank": 17,
+        "family_id": "DTOP",
+        "type": "双顶M",
+        "direction": "做空",
+        "train": {
+          "confirmed_events": 32,
+          "eligible_signal_bars": 0,
+          "closed_trades": 0
+        },
+        "evidence_status": "gating_bottleneck",
+        "training_trade_gap": 30,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "not_estimable_zero_observed_rate",
+          "total_years_point": null,
+          "total_years_for_90pct_chance_at_point_rate": null,
+          "total_years_rate_lower_stress": null
+        }
+      },
+      {
+        "rank": 18,
+        "family_id": "FLAG",
+        "type": "旗形",
+        "direction": "旗杆同向",
+        "train": {
+          "confirmed_events": 1,
+          "eligible_signal_bars": 0,
+          "closed_trades": 0
+        },
+        "evidence_status": "gating_bottleneck",
+        "training_trade_gap": 30,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "not_estimable_zero_observed_rate",
+          "total_years_point": null,
+          "total_years_for_90pct_chance_at_point_rate": null,
+          "total_years_rate_lower_stress": null
+        }
+      },
+      {
+        "rank": 19,
+        "family_id": "TRTOP",
+        "type": "三重顶",
+        "direction": "做空",
+        "train": {
+          "confirmed_events": 0,
+          "eligible_signal_bars": 0,
+          "closed_trades": 0
+        },
+        "evidence_status": "unobserved_family",
+        "training_trade_gap": 30,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "not_estimable_zero_observed_rate",
+          "total_years_point": null,
+          "total_years_for_90pct_chance_at_point_rate": null,
+          "total_years_rate_lower_stress": null
+        }
+      },
+      {
+        "rank": 20,
+        "family_id": "TRBOT",
+        "type": "三重底",
+        "direction": "做多",
+        "train": {
+          "confirmed_events": 2,
+          "eligible_signal_bars": 0,
+          "closed_trades": 0
+        },
+        "evidence_status": "gating_bottleneck",
+        "training_trade_gap": 30,
+        "training_evidence_sufficient": false,
+        "planning": {
+          "status": "not_estimable_zero_observed_rate",
+          "total_years_point": null,
+          "total_years_for_90pct_chance_at_point_rate": null,
+          "total_years_rate_lower_stress": null
+        }
+      }
+    ],
+    "scope_guards": {
+      "family_counts_are_train_only": true,
+      "validation_and_test_do_not_increase_family_evidence": true,
+      "combined_strategy_counts_do_not_belong_to_any_family": true,
+      "daily_layer_counts_toward_five_minute_threshold": false,
+      "history_estimates_are_capacity_planning_not_profit_forecasts": true
+    },
+    "warnings": [
+      "所有年限都是数据采购与容量规划，不是收益外推。",
+      "市场状态非独立同分布，Poisson结果只是小样本应力参考。",
+      "日频五年数据不计入五分钟形态交易门槛。",
+      "iFinD HTTP五分钟历史在约一年边界外返回-4309。",
+      "三个授权工作区扫描未发现更早且可导入的沪深300/IF盘中资产。",
+      "当前形态训练家族最多4笔独立交易，30笔最低训练门槛未满足；9类为零交易不可估计。",
+      "券商历史手续费表仍为模板，正式执行回测不能用当前费率冒充历史费率。"
+    ],
+    "security": {
+      "stores_tokens": false,
+      "stores_full_market_rows": false
+    }
   }
 }
