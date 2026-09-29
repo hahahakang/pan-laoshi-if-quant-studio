@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
   "api_base": "https://api.trycloudflare.com/",
-  "updated_at": "2026-09-29T07:04:56.424478+00:00",
+  "updated_at": "2026-09-29T07:05:15.056462+00:00",
   "transport": "trycloudflare_quick_tunnel"
 }
